@@ -1,14 +1,14 @@
 from django.db import models
 
 class Categories(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)
     slug = models.CharField(max_length=255)
     class Meta:
         db_table = u'categories'
 
 class Jobs(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.AutoField(primary_key=True)
     category = models.ForeignKey(Categories, null=True, blank=True)
     user_id = models.IntegerField(null=True, blank=True)
     job_type = models.CharField(max_length=255)

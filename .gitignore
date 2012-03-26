@@ -13,3 +13,4 @@ parts
 media/uploads
 tmp
 jobeet/settings.py
+build
