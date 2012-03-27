@@ -5,17 +5,21 @@ import datetime
 
 class JobeetTestCase(unittest.TestCase):
     def setUp(self):
+        
         from autofixture import AutoFixture
         programming = Categories.objects.get_by_slug('programming')
         jobs_fx = AutoFixture(Jobs, field_values={'is_activated':True, 'category':programming})
         
-        jobs = jobs_fx.create(15)
+        self.jobs = jobs_fx.create(15)
         
-        for j in jobs:
+        for j in self.jobs:
             j.save()
-        
+    
+    def tearDown(self):
+        for j in self.jobs:
+           j.delete() 
 
-class JobsTestCase(unittest.TestCase):
+class JobsTestCase(JobeetTestCase):
     
     def setUp(self):
         programming = Categories.objects.get(name='Programming')
@@ -31,6 +35,10 @@ class JobsTestCase(unittest.TestCase):
             is_public=True,
             is_activated=True,
         )
+        
+    def test_jobs_are_more_than_2(self):
+        jobs = Jobs.objects.all()        
+        self.assertTrue(len(jobs) > 2)
 
     def test_job_expiration_date_is_30_days_from_creation_date(self):
         self.acme.save()
@@ -46,15 +54,20 @@ class JobsTestCase(unittest.TestCase):
         self.acme.updated_at = self.acme.updated_at.replace(microsecond=0)
         self.assertEqual(self.acme.updated_at.isoformat(), now.isoformat())
       
-      
+    def test_jobs_by_category(self):
+        cat = Categories.objects.get_by_slug('programming')
+        from jobeet import settings
+        jobs = Jobs.objects.get_active_by_category(cat, settings.MAX_JOBS_BY_CATEGORY)
+        self.assertEqual(10, len(jobs))
 
     def tearDown(self):
         self.acme.delete()
         
         
-class CategoryTestCase(unittest.TestCase):
+class CategoryTestCase(JobeetTestCase):
 
     def test_get_with_jobs(self):
-    
         categories = Categories.objects.get_with_jobs()
-        self.assertEqual(2, len(categories))
+        for c in categories:
+            print c
+        self.assertEqual(2, len(list(categories)))

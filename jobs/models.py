@@ -2,11 +2,16 @@ from django.db import models
 
 class CategoriesManager(models.Manager):
     def get_with_jobs(self):
-        return self.extra(tables=["jobs"],
-                          where=["""jobs.category_id = categories.id"""])
+        return self.raw('SELECT c0_.id AS id, c0_.name AS name1, c0_.slug AS slug2 FROM categories c0_ INNER JOIN jobs j1_ ON c0_.id = j1_.category_id AND (j1_.category_id = c0_.id) GROUP BY id')
+
     
     def get_by_slug(self, sl):
         return self.get(slug=sl)
+        
+class JobsManager(models.Manager):
+   def get_active_by_category(self, cat, limit):
+        import datetime
+        return self.filter(category=cat, is_activated=True, expires_at__gt=datetime.datetime.now()).order_by('-expires_at')[limit:]
 
 class Categories(models.Model):
     id = models.AutoField(primary_key=True)
@@ -28,6 +33,8 @@ class Jobs(models.Model):
         ('parttime', 'Part time'),
         ('freelance', 'Freelance'),
     )
+    
+    objects = JobsManager()
    
     id = models.AutoField(primary_key=True)
     category = models.ForeignKey(Categories, null=True, blank=False)

@@ -2,6 +2,8 @@
 
 JOB_EXPIRATION_DAY = 30
 
+MAX_JOBS_BY_CATEGORY = 10
+
 # Django settings for jobeet project.
 
 DEBUG = True
@@ -24,7 +26,7 @@ DATABASES = {
     },
     'test': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'mgr_django_jobeet_tests',                      # Or path to database file if using sqlite3.
+        'NAME': 'test_test_mgr_django_jobeet',                      # Or path to database file if using sqlite3.
         'USER': 'root',                      # Not used with sqlite3.
         'PASSWORD': 'pass',                  # Not used with sqlite3.
         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
