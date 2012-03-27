@@ -37,8 +37,8 @@ class Jobs(models.Model):
     location = models.CharField(max_length=255)
     description = models.CharField(max_length=4000)
     how_to_apply = models.CharField(max_length=4000)
-    is_public = models.IntegerField()
-    is_activated = models.IntegerField()
+    is_public = models.BooleanField()
+    is_activated = models.BooleanField()
     email = models.CharField(max_length=255)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(null=True, blank=True)
@@ -48,7 +48,7 @@ class Jobs(models.Model):
         import datetime
         if not self.id:
             self.created_at = datetime.datetime.now()
-            import settings
+            from jobeet import settings
             self.expires_at = self.created_at + datetime.timedelta(settings.JOB_EXPIRATION_DAY)
         else:
             self.updated_at = datetime.datetime.now()
