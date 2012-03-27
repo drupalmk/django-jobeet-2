@@ -1,9 +1,16 @@
 from django.db import models
 
+class CategoriesManager(models.Manager):
+    def get_with_jobs(self):
+        return self.extra(tables=["jobs"],
+                          where=["""jobs.category_id = categories.id"""])
+
 class Categories(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)
     slug = models.CharField(max_length=255)
+    
+    objects = CategoriesManager()
     
     def __unicode__(self):
         return self.name
