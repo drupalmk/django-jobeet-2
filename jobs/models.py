@@ -4,6 +4,9 @@ class CategoriesManager(models.Manager):
     def get_with_jobs(self):
         return self.extra(tables=["jobs"],
                           where=["""jobs.category_id = categories.id"""])
+    
+    def get_by_slug(self, sl):
+        return self.get(slug=sl)
 
 class Categories(models.Model):
     id = models.AutoField(primary_key=True)
