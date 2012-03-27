@@ -1,16 +1,38 @@
-"""
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
-
-Replace this with more appropriate tests for your application.
-"""
-
-from django.test import TestCase
+from django.utils import unittest
+from jobs.models import Jobs, Categories
+import datetime
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+class JobsTestCase(unittest.TestCase):
+    def setUp(self):
+        programming = Categories.objects.get(name='Programming')
+        self.acme = Jobs.objects.create(
+            category=programming,
+            company='Acme Inc',
+            url='http://www.acme.com',
+            position='Web Designer',
+            location='Warsaw, Poland',
+            description='Some description',
+            how_to_apply='Send resume to jobs@acme.com',
+            email='jobs@acme.com',
+            is_public=True,
+            is_activated=True,
+        )
+
+    def test_job_expiration_date_is_30_days_from_creation_date(self):
+        self.acme.save()
+        self.assertEqual(self.acme.created_at + datetime.timedelta(30), self.acme.expires_at)
+
+    def test_set_updated_datetime(self):
+        self.acme.save()
+        self.acme.company = 'New Company'
+        now = datetime.datetime.now()
+        self.acme.save()
+        now = now.replace(microsecond=0);
+        self.acme.updated_at = self.acme.updated_at.replace(microsecond=0)
+        self.assertEqual(self.acme.updated_at.isoformat(), now.isoformat())
+      
+      
+
+    def tearDown(self):
+        self.acme.delete()

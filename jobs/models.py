@@ -37,6 +37,14 @@ class Jobs(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField()
     
+    def save(self, *args, **kwargs):
+        import datetime
+        if not self.id:
+            self.created_at = datetime.datetime.now()
+            self.expires_at = self.created_at + datetime.timedelta(30)
+        else:
+            self.updated_at = datetime.datetime.now()
+        super(Jobs, self).save(*args, **kwargs) 
     
     def __unicode__(self):
         return self.company + 'is looking for ' + self.position
