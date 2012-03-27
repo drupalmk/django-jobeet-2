@@ -12,10 +12,17 @@ class Categories(models.Model):
         db_table = u'categories'
 
 class Jobs(models.Model):
+    
+    JOB_TYPES = (
+        ('fulltime', 'Full time'),
+        ('parttime', 'Part time'),
+        ('freelance', 'Freelance'),
+    )
+   
     id = models.AutoField(primary_key=True)
     category = models.ForeignKey(Categories, null=True, blank=False)
     user_id = models.IntegerField(null=True, blank=True)
-    job_type = models.CharField(max_length=255)
+    job_type = models.CharField(max_length=255, choices=JOB_TYPES)
     company = models.CharField(max_length=255)
     logo = models.CharField(max_length=255, blank=True)
     url = models.CharField(max_length=255, blank=True)
