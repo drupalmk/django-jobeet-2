@@ -5,6 +5,8 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^jobs/$', 'jobs.views.index'),
+    url(r'^jobs/(?P<id>\d+)/show$', 'jobs.views.show_job'),                    
     # Examples:
     # url(r'^$', 'jobeet.views.home', name='home'),
     # url(r'^jobeet/', include('jobeet.foo.urls')),

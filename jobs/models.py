@@ -9,7 +9,7 @@ class Categories(models.Model):
 
 class Jobs(models.Model):
     id = models.AutoField(primary_key=True)
-    category = models.ForeignKey(Categories, null=True, blank=True)
+    category = models.ForeignKey(Categories, null=True, blank=False)
     user_id = models.IntegerField(null=True, blank=True)
     job_type = models.CharField(max_length=255)
     company = models.CharField(max_length=255)
