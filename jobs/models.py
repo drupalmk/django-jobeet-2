@@ -4,6 +4,10 @@ class Categories(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)
     slug = models.CharField(max_length=255)
+    
+    def __unicode__(self):
+        return self.name
+    
     class Meta:
         db_table = u'categories'
 
@@ -25,5 +29,10 @@ class Jobs(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(null=True, blank=True)
     expires_at = models.DateTimeField()
+    
+    
+    def __unicode__(self):
+        return self.company + 'is looking for ' + self.position
+    
     class Meta:
         db_table = u'jobs'
