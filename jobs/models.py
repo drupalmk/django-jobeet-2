@@ -9,9 +9,10 @@ class CategoriesManager(models.Manager):
         return self.get(slug=sl)
         
 class JobsManager(models.Manager):
-   def get_active_by_category(self, cat, limit):
+    def get_active_by_category(self, cat, limit):
         import datetime
-        return self.filter(category=cat, is_activated=True, expires_at__gt=datetime.datetime.now()).order_by('-expires_at')[limit:]
+        from django.db.models import Q
+        return self.filter(category=cat, is_activated=True, expires_at__gt=datetime.datetime.now()).values('id').order_by('-expires_at')[:limit]
 
 class Categories(models.Model):
     id = models.AutoField(primary_key=True)
