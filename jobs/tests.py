@@ -3,7 +3,20 @@ from jobs.models import Jobs, Categories
 import datetime
 
 
+class JobeetTestCase(unittest.TestCase):
+    def setUp(self):
+        from autofixture import AutoFixture
+        programming = Categories.objects.get_by_slug('programming')
+        jobs_fx = AutoFixture(Jobs, field_values={'is_activated':True, 'category':programming})
+        
+        jobs = jobs_fx.create(15)
+        
+        for j in jobs:
+            j.save()
+        
+
 class JobsTestCase(unittest.TestCase):
+    
     def setUp(self):
         programming = Categories.objects.get(name='Programming')
         self.acme = Jobs.objects.create(
