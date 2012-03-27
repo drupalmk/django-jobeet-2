@@ -21,7 +21,8 @@ class JobsTestCase(unittest.TestCase):
 
     def test_job_expiration_date_is_30_days_from_creation_date(self):
         self.acme.save()
-        self.assertEqual(self.acme.created_at + datetime.timedelta(30), self.acme.expires_at)
+        import settings
+        self.assertEqual(self.acme.created_at + datetime.timedelta(settings.JOB_EXPIRATION_DAY), self.acme.expires_at)
 
     def test_set_updated_datetime(self):
         self.acme.save()

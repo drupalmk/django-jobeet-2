@@ -1,3 +1,7 @@
+#Jobeet constants
+
+JOB_EXPIRATION_DAY = 30
+
 # Django settings for jobeet project.
 
 DEBUG = True

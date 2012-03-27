@@ -41,7 +41,8 @@ class Jobs(models.Model):
         import datetime
         if not self.id:
             self.created_at = datetime.datetime.now()
-            self.expires_at = self.created_at + datetime.timedelta(30)
+            import settings
+            self.expires_at = self.created_at + datetime.timedelta(settings.JOB_EXPIRATION_DAY)
         else:
             self.updated_at = datetime.datetime.now()
         super(Jobs, self).save(*args, **kwargs) 
