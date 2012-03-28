@@ -43,7 +43,7 @@ class Jobs(models.Model):
     job_type = models.CharField(max_length=255, choices=JOB_TYPES)
     company = models.CharField(max_length=255)
     logo = models.CharField(max_length=255, blank=True)
-    url = models.UrlField(max_length=255, blank=True)
+    url = models.URLField(max_length=255, blank=True)
     position = models.CharField(max_length=255, blank=True)
     location = models.CharField(max_length=255)
     description = models.CharField(max_length=4000)

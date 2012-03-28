@@ -73,6 +73,4 @@ class CategoryTestCase(JobeetTestCase):
 
     def test_get_with_jobs(self):
         categories = Categories.objects.get_with_jobs()
-        for c in categories:
-            print c
         self.assertEqual(2, len(list(categories)))
