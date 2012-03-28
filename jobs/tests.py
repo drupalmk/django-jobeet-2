@@ -4,20 +4,16 @@ import datetime
 
 
 class JobeetTestCase(unittest.TestCase):
-    def setUp(self):
-        super
-        from autofixture import AutoFixture
-        programming = Categories.objects.get_by_slug('programming')
-        jobs_fx = AutoFixture(Jobs, field_values={'is_activated':True, 'category':programming})
-        
-        self.jobs = jobs_fx.create(15)
-        
-        for j in self.jobs:
-            j.save()
+    def foo(self):
+        print "nothng"
+    #ef setUp(self):
+        #uper
     
-    def tearDown(self):
-        for j in self.jobs:
-           j.delete() 
+        
+    
+    #ef tearDown(self):
+        #or j in self.jobs:
+         # j.delete() 
 
 class JobsTestCase(JobeetTestCase):
     
@@ -58,11 +54,19 @@ class JobsTestCase(JobeetTestCase):
         self.assertEqual(self.acme.updated_at.isoformat(), now.isoformat())
       
     def test_jobs_by_category(self):
-        cat = Categories.objects.get_by_slug('programming')
-        self.assertTrue(cat.name == 'Programming')
+        from autofixture import AutoFixture
+        programming = Categories.objects.get_by_slug('programming')
+        jobs_fx = AutoFixture(Jobs, field_values={'is_activated':True, 'category':programming})
+        
+        self.jobs = jobs_fx.create(15)
+        
+        for j in self.jobs:
+            j.save()
+
         from jobeet import settings
-        jobs = Jobs.objects.get_active_by_category(cat, settings.MAX_JOBS_BY_CATEGORY)
-        self.assertTrue(len(jobs) > 0)
+        jobs = Jobs.objects.get_active_by_category(programming, settings.MAX_JOBS_BY_CATEGORY)
+        self.assertTrue(len(jobs) == 3)
+        self.assertTrue(len(jobs) > 3)
         self.assertEqual(10, len(jobs))
 
     def tearDown(self):

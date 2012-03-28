@@ -68,5 +68,10 @@ class Jobs(models.Model):
     def __unicode__(self):
         return self.company + 'is looking for ' + self.position
     
+    def __reduce__(self):
+        'Return state information for pickling'
+        return self.__class__, (int(self.hash_code), str(self.file_pointer))
+
+    
     class Meta:
         db_table = u'jobs'
