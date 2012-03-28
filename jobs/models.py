@@ -11,7 +11,6 @@ class CategoriesManager(models.Manager):
 class JobsManager(models.Manager):
     def get_active_by_category(self, cat, limit):
         import datetime
-        from django.db.models import Q
         return self.filter(category=cat, is_activated=True, expires_at__gt=datetime.datetime.now()).values('id').order_by('-expires_at')[:limit]
 
 class Categories(models.Model):
