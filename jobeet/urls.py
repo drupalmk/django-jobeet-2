@@ -5,7 +5,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$','jobs.views.index'),
+    url(r'^$','jobs.views.index', name='index'),
     url(r'^jobs/$', 'jobs.views.index'),
     url(r'^jobs/(?P<id>\d+)/show$', 'jobs.views.show_job'),                    
     # Examples:

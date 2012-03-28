@@ -31,6 +31,8 @@ class JobsTestCase(JobeetTestCase):
             is_public=True,
             is_activated=True,
         )
+        
+        
     def test_all_jobs_is_3(self):
         jobs = Jobs.objects.all()
         self.assertTrue(len(jobs) == 3)
