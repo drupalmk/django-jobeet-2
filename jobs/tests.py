@@ -86,3 +86,8 @@ class CategoryTestCase(JobeetTestCase):
     def test_get_with_jobs(self):
         categories = Categories.objects.get_with_jobs(settings.MAX_JOBS_BY_CATEGORY)
         self.assertEqual(2, len(list(categories)))
+        programming = categories[1]
+        print '$$$$$'
+        print programming
+        programmingJobs = programming.active_jobs
+        self.assertTrue(len(programmingJobs) > 0)

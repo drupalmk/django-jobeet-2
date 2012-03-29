@@ -3,9 +3,11 @@ from django.db import models
 class CategoriesManager(models.Manager):
     def get_with_jobs(self, limit_per_category):
         categories = self.raw('SELECT c0_.id AS id, c0_.name AS name1, c0_.slug AS slug2 FROM categories c0_ INNER JOIN jobs j1_ ON c0_.id = j1_.category_id AND (j1_.category_id = c0_.id) GROUP BY id')
+        new_categories = []
         for c in categories:
             c.active_jobs = Jobs.objects.get_active_by_category(c, limit_per_category)
-        return categories
+            new_categories.append(c)
+        return new_categories
     
     def get_by_slug(self, sl):
         return self.get(slug=sl)
