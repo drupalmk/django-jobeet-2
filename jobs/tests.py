@@ -1,5 +1,6 @@
 from django.utils import unittest
 from jobs.models import Jobs, Categories
+from jobeet import settings
 import datetime
 
 
@@ -11,11 +12,23 @@ class JobeetTestCase(unittest.TestCase):
         programming = Categories.objects.get_by_slug('programming')
         import datetime
         now = datetime.datetime.now()
-        jobs_fx = AutoFixture(Jobs, field_values={'is_activated':True, 'category':programming, 'created_at':now, 'expires_at': now + datetime.timedelta(30)})
+        jobs_fx = AutoFixture(Jobs, field_values={'category':programming, 'created_at':now, 'expires_at': now + datetime.timedelta(30)})
         
         self.jobs = jobs_fx.create(15)
         
+        #job = jobs_fx.create(1)
+        #for j in job:
+        #    j.is_activated = True
+        #    print j.is_activated
+        #   print j.created_at
+        #    print j.expires_at
+        #   print j.category
+        
+        
+        
+        
         for j in self.jobs:
+            j.is_activated = True
             j.save()
             
     #def tearDown(self):
@@ -39,11 +52,6 @@ class JobsTestCase(JobeetTestCase):
             is_activated=True,
         )
         
-        
-    def test_all_jobs_is_3(self):
-        jobs = Jobs.objects.all()
-        self.assertTrue(len(jobs) == 3)
-        
     def test_jobs_are_more_than_5(self):
         jobs = Jobs.objects.all()
         self.assertTrue(len(jobs) > 5)
@@ -66,7 +74,7 @@ class JobsTestCase(JobeetTestCase):
         from jobeet import settings
         programming = Categories.objects.get_by_slug('programming')
         jobs = Jobs.objects.get_active_by_category(programming, settings.MAX_JOBS_BY_CATEGORY)
-        self.assertEqual(2, len(jobs))
+        self.assertEqual(10, len(jobs))
         self.assertEqual(10, len(jobs))
 
     def tearDown(self):
@@ -76,5 +84,5 @@ class JobsTestCase(JobeetTestCase):
 class CategoryTestCase(JobeetTestCase):
 
     def test_get_with_jobs(self):
-        categories = Categories.objects.get_with_jobs()
+        categories = Categories.objects.get_with_jobs(settings.MAX_JOBS_BY_CATEGORY)
         self.assertEqual(2, len(list(categories)))

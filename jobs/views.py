@@ -4,12 +4,8 @@ from django.template import RequestContext
 from jobs.models import *
 
 def index(request):
-
-  categories = Categories.objects.get_with_jobs()
-
   from jobeet import settings
-  for category in categories:
-    category.active_jobs = Jobs.objects.get_active_by_category(category, settings.MAX_JOBS_BY_CATEGORY)
+  categories = Categories.objects.get_with_jobs(settings.MAX_JOBS_BY_CATEGORY)
 
   return render_to_response('index.html', {'categories': categories}, context_instance=RequestContext(request))
 

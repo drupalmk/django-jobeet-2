@@ -1,9 +1,11 @@
 from django.db import models
 
 class CategoriesManager(models.Manager):
-    def get_with_jobs(self):
-        return self.raw('SELECT c0_.id AS id, c0_.name AS name1, c0_.slug AS slug2 FROM categories c0_ INNER JOIN jobs j1_ ON c0_.id = j1_.category_id AND (j1_.category_id = c0_.id) GROUP BY id')
-
+    def get_with_jobs(self, limit_per_category):
+        categories = self.raw('SELECT c0_.id AS id, c0_.name AS name1, c0_.slug AS slug2 FROM categories c0_ INNER JOIN jobs j1_ ON c0_.id = j1_.category_id AND (j1_.category_id = c0_.id) GROUP BY id')
+        for c in categories:
+            c.active_jobs = Jobs.objects.get_active_by_category(c, limit_per_category)
+        return categories
     
     def get_by_slug(self, sl):
         return self.get(slug=sl)
@@ -14,6 +16,9 @@ class JobsManager(models.Manager):
         return self.filter(category=cat, is_activated=True, expires_at__gt=datetime.datetime.now()).values('id').order_by('-expires_at')[:limit]
 
 class Categories(models.Model):
+    
+    active_jobs = []
+    
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True)
     slug = models.CharField(max_length=255)
@@ -66,11 +71,6 @@ class Jobs(models.Model):
     
     def __unicode__(self):
         return self.company + 'is looking for ' + self.position
-    
-    def __reduce__(self):
-        'Return state information for pickling'
-        return self.__class__, (int(self.hash_code), str(self.file_pointer))
-
     
     class Meta:
         db_table = u'jobs'

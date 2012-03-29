@@ -16,19 +16,15 @@
             {{ category.name }}
             </a>
          </h1>
-         Job List
+        <table class="jobs">
+        {% for job in category.active_jobs %}
+            <tr class="{% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+                <td class="location">{{ job.location }}</td>
+                <td class="position"><a href="{% url show_job job.id %}">{{ job.position}}</a></td>
+             <td class="company">{{ job.company }}</td>
+           </tr>
+        {% endfor %}
        </div>
-      {% comment %}
-      {% #if category.activeJobsAmount > jobsLimit %}
-      <div class="more_jobs">
-        and
-      <a href="">
-        {{ #category.activeJobsAmount - jobsLimit }}
-      </a>
-        more...
-      </div>
-     {% endif %}
-     {% endcomment %}
-  {% endfor %}
+    {% endfor %}
 </div>
 {% endblock %}
