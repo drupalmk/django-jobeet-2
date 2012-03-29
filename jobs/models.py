@@ -41,6 +41,11 @@ class Jobs(models.Model):
         ('freelance', 'Freelance'),
     )
     
+    def get_type(self):
+        dct = dict(self.JOB_TYPES)
+        return dct[self.job_type]
+
+    
     objects = JobsManager()
    
     id = models.AutoField(primary_key=True)

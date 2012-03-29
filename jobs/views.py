@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import Http404
 from jobs.models import *
 
 def index(request):
@@ -10,4 +11,8 @@ def index(request):
   return render_to_response('index.html', {'categories': categories}, context_instance=RequestContext(request))
 
 def show_job(request, id):
-    return HttpResponse("You're looking at the results of job %s." % id)
+    try:
+        job = Jobs.objects.get(pk=id)
+    except Jobs.DoesNotExist:
+        raise Http404
+    return render_to_response('show.html', {'job': job}, context_instance=RequestContext(request))
